@@ -13,6 +13,5 @@ module.exports = {
         inlineRequires: false,
       },
     }),
-  },
-  sourceExts: ['jsx', 'js', 'ts', 'tsx', 'json']
+  }
 };
