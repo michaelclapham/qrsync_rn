@@ -1,4 +1,6 @@
+import 'react-native-gesture-handler';
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,11 +18,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+
 declare var global: { HermesInternal: any };
 
 const App: React.FC = () => {
   return (
-    <>
+    <NavigationContainer>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
@@ -62,7 +65,7 @@ const App: React.FC = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </>
+    </NavigationContainer>
   );
 };
 
