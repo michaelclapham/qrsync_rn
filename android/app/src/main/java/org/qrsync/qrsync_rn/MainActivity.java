@@ -1,4 +1,4 @@
-package com.qrsync_rn;
+package org.qrsync.qrsync_rn;
 
 import com.facebook.react.ReactActivity;
 

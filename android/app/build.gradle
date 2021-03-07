@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.qrsync_rn"
+        applicationId "org.qrsync.qrsync_rn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
