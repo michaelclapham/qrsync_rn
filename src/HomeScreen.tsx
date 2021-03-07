@@ -29,8 +29,8 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
                         </View>
                     )}
                     <View style={styles.body}>
-                        <TextInput onChangeText={(text) => dispatch(setSessionId(text))}></TextInput>
-                        <Text>{sessionId}</Text>
+                        <TextInput placeholder="Enter session id here" onChangeText={(text) => dispatch(setSessionId(text))}></TextInput>
+                        <Text>Session Id: {sessionId}</Text>
                         <Button
                             title="Go to About page"
                             onPress={() =>

@@ -21,6 +21,8 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './HomeScreen';
 import AboutScreen from './AboutScreen';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 const Stack = createStackNavigator();
 
@@ -31,20 +33,22 @@ export type RootStackParamList = {
 
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
             name="Home"
             component={HomeScreen}
             options={{ title: 'Welcome' }}
           />
-        <Stack.Screen
+          <Stack.Screen
             name="About"
             component={AboutScreen}
             options={{ title: 'About' }}
           />
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
