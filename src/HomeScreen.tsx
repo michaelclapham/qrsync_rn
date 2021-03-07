@@ -1,8 +1,10 @@
 import { NavigationProp } from "@react-navigation/core";
 import React from "react"
-import { View, Text, StatusBar, SafeAreaView, ScrollView, StyleSheet, Button } from "react-native"
+import { View, Text, StatusBar, SafeAreaView, ScrollView, StyleSheet, Button, TextInput } from "react-native"
 import { Colors, DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from "react-native/Libraries/NewAppScreen"
 import { RootStackParamList } from "./App";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSessionId, setSessionId } from "./sessionSlice";
 
 declare var global: { HermesInternal: any };
 
@@ -11,6 +13,8 @@ type Props = {
 }
 
 const HomeScreen: React.FC<Props> = ({navigation}) => {
+    const sessionId = useSelector(selectSessionId);
+    const dispatch = useDispatch();
     return (
         <>
             <StatusBar barStyle="dark-content" />
@@ -25,6 +29,8 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
                         </View>
                     )}
                     <View style={styles.body}>
+                        <TextInput onChangeText={(text) => dispatch(setSessionId(text))}></TextInput>
+                        <Text>{sessionId}</Text>
                         <Button
                             title="Go to About page"
                             onPress={() =>
