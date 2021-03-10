@@ -1,8 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { sessionReducer } from './sessionSlice';
+import { websocketReducer } from './websocketSlice';
 
 export const store = configureStore({
   reducer: {
+    websocket: websocketReducer,
     session: sessionReducer,
   },
 });

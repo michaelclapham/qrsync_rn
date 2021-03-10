@@ -1,46 +1,28 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createSlice, PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { ServerTypes } from './ServerTypes';
 import { AppThunk, RootState } from './store';
+import { receivedClientJoinedSession } from './websocketSlice';
 
-interface Client {
-  id: string;
-  name: string;
-}
-
-interface SessionState {
-  id: string | null;
-  clients: Client[];
+export interface SessionState {
+    sessionId: string | null;
 }
 
 const initialState: SessionState = {
-  id: null,
-  clients: []
+    sessionId: null
 };
 
-export const counterSlice = createSlice({
-  name: 'session',
-  initialState,
-  reducers: {
-    setSessionId: (state, action: PayloadAction<string>) => {
-      state.id = action.payload;
+export const sessionSlice = createSlice({
+    name: 'session',
+    initialState,
+    reducers: {
+    },
+    extraReducers: (builder) => {
+        builder.addCase(receivedClientJoinedSession, (state, action) => {
+            if (action.payload.ourClient && action.payload.msg.clientId === action.payload.ourClient.id) {
+                state.sessionId = action.payload.msg.sessionId;
+            }
+        });
     }
-  },
 });
 
-export const { setSessionId } = counterSlice.actions;
-
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(setSessionIdAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-export const setSessionIdAsync = (id: string): AppThunk => dispatch => {
-  setTimeout(() => {
-    dispatch(setSessionId(id));
-  }, 1000);
-};
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectSessionId = (state: RootState) => state.session.id;
-
-export const sessionReducer = counterSlice.reducer;
+export const sessionReducer = sessionSlice.reducer;
