@@ -29,45 +29,46 @@ export const websocketSlice = createSlice({
             state.connected = false;
             state.ourClient = null;
         },
-        receivedClientConnect: (state, action: PayloadAction<ServerTypes.ClientConnectMsg>) => {
-            state.ourClient = action.payload.client;
-        },
-        receivedClientJoinedSession: (state, action: PayloadAction<{ msg: ServerTypes.ClientJoinedSessionMsg, ourClient: ServerTypes.Client | null }>) => {
+        receivedWSMessage: (state, action: PayloadAction<{ msg: ServerTypes.Msg, ourClient: ServerTypes.Client | null }>) => {
+            switch (action.payload.msg.type) {
+                case "ClientConnect": {
+                    state.ourClient = action.payload.msg.client;
+                    break;
+                }
+            }
         }
     }
 });
 
-export const { connected, disconnected, receivedClientJoinedSession, receivedClientConnect } = websocketSlice.actions;
+export const { connected, disconnected, receivedWSMessage } = websocketSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(connectToWebsocket())`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const connectToWebsocket: AppThunk = (dispatch, getState) => {
+export const connectToWebsocket: (url: string) => AppThunk = (url: string) => (dispatch, getState) => {
     if (ws) {
         ws.close();
     }
-    ws = new WebSocket("wss://qrsync.org/api/v1/ws");
+    ws = new WebSocket(url);
     ws.onopen = () => {
         dispatch(connected());
     }
     ws.onmessage = (event) => {
-        console.log("ws event", event);
+        console.log("WS Event", event);
         const msg: ServerTypes.Msg = JSON.parse(event.data);
-        switch (msg.type) {
-            case "ClientConnect": {
-                dispatch(receivedClientConnect(msg));
-                break;
-            }
-            case "ClientJoinedSession": {
-                const ourClient = getState().websocket.ourClient;
-                dispatch(receivedClientJoinedSession({msg, ourClient}));
-                break;
-            }
-        }
+        const ourClient = getState().websocket.ourClient;
+        dispatch(receivedWSMessage({ msg, ourClient }))
     };
     ws.onclose = () => {
         dispatch(disconnected());
+    }
+};
+
+export const sendWSMessage: (msg: ServerTypes.Msg) => AppThunk = (msg) => (dispatch, getState) => {
+    if (ws.readyState === WebSocket.OPEN) {
+        const body = JSON.stringify(msg);
+        ws.send(body);
     }
 };
 
