@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BarCodeReadEvent, RNCamera } from "react-native-camera";
 import QRCodeScanner from "react-native-qrcode-scanner";
+import { useDispatch } from "react-redux";
+import { scanClientId } from "./sessionSlice";
 
 const AboutScreen: React.FC = () => {
 
     const onSuccess = (event: BarCodeReadEvent) => {
         console.log("Success?");
         Alert.alert("QR Code Scanned", event.data);
+        const dispatch = useDispatch();
+        dispatch(scanClientId(event.data));
     }
 
     return (

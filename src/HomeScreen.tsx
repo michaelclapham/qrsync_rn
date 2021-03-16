@@ -4,7 +4,8 @@ import { View, Text, StatusBar, SafeAreaView, ScrollView, StyleSheet, Button, Te
 import { Colors, DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from "react-native/Libraries/NewAppScreen"
 import { RootStackParamList } from "./App";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSessionId, setSessionId } from "./sessionSlice";
+import { selectSessionId } from "./sessionSlice";
+import { selectOurClient } from "./websocketSlice";
 
 declare var global: { HermesInternal: any };
 
@@ -13,8 +14,7 @@ type Props = {
 }
 
 const HomeScreen: React.FC<Props> = ({navigation}) => {
-    const sessionId = useSelector(selectSessionId);
-    const dispatch = useDispatch();
+    const ourClient = useSelector(selectOurClient);
     return (
         <>
             <StatusBar barStyle="dark-content" />
@@ -29,8 +29,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
                         </View>
                     )}
                     <View style={styles.body}>
-                        <TextInput placeholder="Enter session id here" onChangeText={(text) => dispatch(setSessionId(text))}></TextInput>
-                        <Text>Session Id: {sessionId}</Text>
+                        <Text>Our Client Id: {ourClient?.id}</Text>
                         <Button
                             title="Go to About page"
                             onPress={() =>

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   SafeAreaView,
@@ -21,8 +21,9 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './HomeScreen';
 import AboutScreen from './AboutScreen';
-import { Provider } from 'react-redux';
 import { store } from './store';
+import { connectToWebsocket } from './websocketSlice';
+import { Provider } from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,10 @@ export type RootStackParamList = {
 };
 
 const App: React.FC = () => {
+  useEffect(() => {
+    store.dispatch(connectToWebsocket("wss://qrsync.org/api/v1/ws"));
+  });
+
   return (
     <Provider store={store}>
       <NavigationContainer>
