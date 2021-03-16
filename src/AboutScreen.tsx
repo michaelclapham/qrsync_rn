@@ -7,29 +7,20 @@ import { scanClientId } from "./sessionSlice";
 
 const AboutScreen: React.FC = () => {
 
+    const dispatch = useDispatch();
     const onSuccess = (event: BarCodeReadEvent) => {
         console.log("Success?");
         Alert.alert("QR Code Scanned", event.data);
-        const dispatch = useDispatch();
         dispatch(scanClientId(event.data));
     }
 
+    console.log("AboutScreen render");
+
     return (
-        <View>
-            <Text>About</Text>
+        <View style={{flexDirection: "column", flex: 1, backgroundColor: "black"}}>
             <QRCodeScanner
                 onRead={onSuccess}
-                topContent={
-                    <Text style={styles.centerText}>
-                        Go to{' '} <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-                        your computer and scan the QR code.
-                     </Text>
-                }
-                bottomContent={
-                    <TouchableOpacity style={styles.buttonTouchable}>
-                        <Text style={styles.buttonText}>OK. Got it!</Text>
-                    </TouchableOpacity>
-                }
+                containerStyle={{ flexDirection: "column", justifyContent: "center"}}
             />
         </View>
     )
